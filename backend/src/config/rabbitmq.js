@@ -5,26 +5,37 @@ let channel = null;
 
 async function connectRabbitMQ() {
   try {
-    // Connect using the URL from your backend/.env file
+    console.log("🔄 Connecting to RabbitMQ...");
+
     connection = await amqp.connect(process.env.RABBITMQ_URL);
-    console.log('✔ RabbitMQ connected');
 
-    // Create a channel for sending/receiving messages
-    channel = await connection.createChannel();
-
-    // Setup a default queue for your DevOps tasks
-    const queueName = 'devops_tasks';
-    await channel.assertQueue(queueName, {
-      durable: true // Ensures messages survive if RabbitMQ restarts
+    connection.on("error", (err) => {
+      console.error("❌ RabbitMQ connection error:", err);
     });
 
+    connection.on("close", () => {
+      console.error("❌ RabbitMQ connection closed");
+    });
+
+    console.log('✔ RabbitMQ connected');
+
+    channel = await connection.createChannel();
+    console.log('✔ RabbitMQ channel created');
+
+    const queueName = 'devops_tasks';
+
+    await channel.assertQueue(queueName, {
+      durable: true
+    });
+
+    console.log(`✔ Queue "${queueName}" is ready`);
+
   } catch (error) {
-    console.error('RabbitMQ Connection Error:', error);
-    process.exit(1); // Stop the server if RabbitMQ fails to connect
+    console.error('❌ RabbitMQ Connection Error:', error);
+    process.exit(1);
   }
 }
 
-// Helper function so you can use this channel in your routes/controllers
 function getChannel() {
   if (!channel) {
     throw new Error('RabbitMQ channel is not initialized!');

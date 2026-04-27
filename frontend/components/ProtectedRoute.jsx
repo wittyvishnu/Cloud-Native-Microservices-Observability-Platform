@@ -10,6 +10,7 @@ export default function ProtectedRoute({ children }) {
   const [isVerified, setIsVerified] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -20,11 +21,7 @@ export default function ProtectedRoute({ children }) {
           return
         }
 
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL || '/api'}/auth/verify-token`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+        const response = await authAPI.verifyToken()
 
         if (response.data?.valid) {
           setIsVerified(true)
@@ -34,7 +31,7 @@ export default function ProtectedRoute({ children }) {
           router.push('/auth/login')
         }
       } catch (error) {
-        console.error('[v0] Token verification failed:', error)
+        console.error('Token verification failed:', error)
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         router.push('/auth/login')
@@ -45,7 +42,6 @@ export default function ProtectedRoute({ children }) {
 
     verifyToken()
   }, [router])
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
