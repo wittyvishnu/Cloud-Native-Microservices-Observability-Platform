@@ -6,7 +6,7 @@ This repository contains the full-stack **DevOpsConnect** application, organized
 ## 🧠 System Architecture
 
 <p align="center">
-  <img src="ARCHITECTURE.jpeg" width="550"/>
+  <img src="ARCHITECTURE.png"/>
 </p>
 
 ### 📌 Overview
@@ -35,19 +35,7 @@ The application is deployed using a secure and scalable AWS architecture:
 
 ---
 
-## 🌐 VPC Setup
 
-![VPC](VPC%20SETUP.png)
-
-### 📌 Description
-- Defines the network structure of the application  
-- Includes:
-  - VPC CIDR block  
-  - Public & Private subnets  
-  - Route tables  
-  - Internet Gateway & NAT Gateway  
-
----
 
 ## 🖥️ EC2 Instances
 
