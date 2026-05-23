@@ -139,39 +139,6 @@ Multiple EC2 instances are used for:
 
 ---
 
-# 🗄️ RDS (PostgreSQL)
-
-<p align="center">
-  <img src="RDS.png" width="100%"/>
-</p>
-
-## 📌 Description
-
-Managed PostgreSQL database using AWS RDS.
-
-### Features:
-- Automated Backups
-- High Availability
-- Secure Private Access
-- Backend-Only Connectivity
-
----
-
-# 📡 Request Checking
-
-<p align="center">
-  <img src="REQUEST-CHECKING.png" width="100%"/>
-</p>
-
-## 📌 Description
-
-Demonstrates:
-- API Request Flow
-- HTTP Methods
-- Status Codes
-- Successful Backend Communication
-
----
 
 # 📁 Project Structure
 
