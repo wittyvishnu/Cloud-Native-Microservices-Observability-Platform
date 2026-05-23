@@ -145,7 +145,8 @@ Multiple EC2 instances are used for:
 ```bash
 backend/        # Node.js + Express backend
 frontend/       # Next.js frontend
-grafana/        # Grafana setup
-prometheus/     # Prometheus configuration
+grafana/        # Grafana setup (Check grafana/README.md for setup)
+prometheus/     # Prometheus configuration (Check prometheus/README.md for setup)
 rabbitMq/       # RabbitMQ Docker setup
 reddis/         # Redis Docker setup
+```
