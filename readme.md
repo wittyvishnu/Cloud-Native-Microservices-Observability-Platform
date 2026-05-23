@@ -1,136 +1,184 @@
 # 🚀 DevOpsConnect Monorepo
 
-This repository contains the full-stack **DevOpsConnect** application, organized as a monorepo with separate folders for backend, frontend, and infrastructure services.
+This repository contains the full-stack **DevOpsConnect** application, organized as a monorepo with separate folders for backend, frontend, monitoring, and infrastructure services.
 
 ---
-## 🧠 System Architecture
+
+# 🧠 System Architecture
 
 <p align="center">
-  <img src="ARCHITECTURE.png"/>
+  <img src="ARCHITECTURE.png" width="100%"/>
 </p>
 
-### 📌 Overview
-The application is deployed using a secure and scalable AWS architecture:
+## 📌 Overview
 
-- The system runs inside a **VPC (Virtual Private Cloud)**  
-- It is divided into:
-  - **Public Subnet** → Load Balancer & Bastion Host  
-  - **Private Subnet** → Application & Databases  
+The application is deployed using a secure and scalable AWS architecture.
 
-### 🔄 Request Flow
-1. User sends request  
-2. Request reaches **Load Balancer (ELB)**  
-3. Routing:
-   - `/api` → Backend (Node.js)  
-   - Other routes → Frontend (Next.js)  
+### Infrastructure Includes:
+- VPC (Virtual Private Cloud)
+- Public & Private Subnets
+- Application Load Balancer
+- Auto Scaling Groups
+- Redis
+- RabbitMQ
+- PostgreSQL RDS
+- Prometheus
+- Grafana
+
+---
+
+# 🔄 Request Flow
+
+1. User sends request through the internet
+2. Request reaches the **Application Load Balancer (ALB)**
+3. ALB routes traffic:
+   - `/api/*` → Backend (Node.js)
+   - Other routes → Frontend (Next.js)
 4. Backend communicates with:
-   - **Redis** (caching)  
-   - **RabbitMQ** (message queue)  
-   - **RDS** (PostgreSQL database)  
-
-### 🔐 Security
-- Only **Load Balancer** is publicly accessible  
-- Backend and database are inside **private subnet**  
-- **Bastion Host** is used for secure SSH access  
+   - Redis
+   - RabbitMQ
+   - PostgreSQL RDS
+5. Prometheus collects metrics
+6. Grafana visualizes metrics dashboards
 
 ---
 
+# 🔐 Security
 
-
-## 🖥️ EC2 Instances
-
-![EC2](EC2%20INSTANCES.png)
-
-### 📌 Description
-- Multiple EC2 instances are used for:
-  - Frontend  
-  - Backend  
-  - Redis  
-  - RabbitMQ  
-- Instances are distributed for **scalability and fault tolerance**
+- Only the **Load Balancer** is publicly accessible
+- Backend services are deployed inside **private subnets**
+- Databases are not exposed publicly
+- Bastion Host is used for secure SSH access
+- NAT Gateway provides outbound internet access
 
 ---
 
-## 🗄️ RDS (Database)
+# ⚖️ High Availability
 
-![RDS](RDS.png)
-
-### 📌 Description
-- Managed **PostgreSQL database** using AWS RDS  
-- Provides:
-  - Automated backups  
-  - High availability  
-  - Secure access from backend only  
+- Multi-AZ deployment:
+  - `us-east-1a`
+  - `us-east-1b`
+- Auto Scaling Groups for frontend & backend
+- Cross-AZ traffic handling
+- Fault-tolerant architecture
 
 ---
 
-## 📡 Request Checking
+# 📊 Monitoring Stack
 
-![Request](REQUEST-CHECKING.png)
-
-### 📌 Description
-- Demonstrates API request flow  
-- Shows:
-  - Request URL  
-  - HTTP Method (POST)  
-  - Status Code (200 OK)  
-- Confirms backend API is working correctly via Load Balancer  
+The project uses:
+- **Node Exporter**
+- **Prometheus**
+- **Grafana**
 
 ---
 
-## Project Structure
+# 📈 Grafana Dashboard 1
 
-- `backend/` — Node.js/Express API (PostgreSQL, Redis, RabbitMQ, AWS S3)
-- `frontend/` — Next.js/React client
-- `rabbitMq/` — Docker setup for RabbitMQ
-- `reddis/` — Docker setup for Redis
+<p align="center">
+  <img src="GRAFANA1.png" width="100%"/>
+</p>
 
-## Quick Start
+## 📌 Description
 
-1. **Clone the repository:**
-	```bash
-	git clone <repo-url>
-	cd "DevOpsConnect application with different Architectures"
-	```
-
-2. **Setup Backend:**
-	```bash
-	cd backend
-	cp .env.example .env
-	npm install
-	npm run dev
-	```
-
-3. **Setup Frontend:**
-	```bash
-	cd ../frontend
-	cp .env.example .env
-	npm install
-	npm run dev
-	```
-
-4. **(Optional) Run Redis and RabbitMQ with Docker:**
-	```bash
-	cd ../reddis
-	docker build -t devopsconnect-redis .
-	docker run -d --name redis -p 6379:6379 devopsconnect-redis
-
-	cd ../rabbitMq
-	docker build -t devopsconnect-rabbitmq .
-	docker run -d --name rabbitmq \
-	  -e RABBITMQ_DEFAULT_USER=admin \
-	  -e RABBITMQ_DEFAULT_PASS=adminpassword \
-	  -p 5672:5672 -p 15672:15672 devopsconnect-rabbitmq
-	```
-
-## Environment Variables
-
-Each folder contains a `.env.example` file. Copy it to `.env` and fill in your values. **Do not commit `.env` files.**
-
-## Production
-
-- Build frontend: `npm run build` in `frontend/`
-- Start backend: `npm start` in `backend/`
-- Start frontend: `npm start` in `frontend/`
+Dashboard displays:
+- CPU Usage
+- Memory Usage
+- Disk Usage
+- Network Monitoring
+- System Metrics
 
 ---
+
+# 📈 Grafana Dashboard 2
+
+<p align="center">
+  <img src="GRAFANA2.png" width="100%"/>
+</p>
+
+## 📌 Description
+
+Dashboard provides:
+- Backend API Metrics
+- Request Monitoring
+- Service Health
+- Real-Time Infrastructure Insights
+
+---
+
+# 📡 Prometheus Metrics
+
+<p align="center">
+  <img src="PROMETHUS.png" width="100%"/>
+</p>
+
+## 📌 Description
+
+Prometheus collects metrics from:
+- Node Exporter (`9100`)
+- Backend Service (`4000`)
+
+Metrics are scraped every `15 seconds`.
+
+---
+
+# 🖥️ EC2 Instances
+
+<p align="center">
+  <img src="EC2 INSTANCES.png" width="100%"/>
+</p>
+
+## 📌 Description
+
+Multiple EC2 instances are used for:
+- Frontend
+- Backend
+- Redis
+- RabbitMQ
+- Monitoring Services
+
+---
+
+# 🗄️ RDS (PostgreSQL)
+
+<p align="center">
+  <img src="RDS.png" width="100%"/>
+</p>
+
+## 📌 Description
+
+Managed PostgreSQL database using AWS RDS.
+
+### Features:
+- Automated Backups
+- High Availability
+- Secure Private Access
+- Backend-Only Connectivity
+
+---
+
+# 📡 Request Checking
+
+<p align="center">
+  <img src="REQUEST-CHECKING.png" width="100%"/>
+</p>
+
+## 📌 Description
+
+Demonstrates:
+- API Request Flow
+- HTTP Methods
+- Status Codes
+- Successful Backend Communication
+
+---
+
+# 📁 Project Structure
+
+```bash
+backend/        # Node.js + Express backend
+frontend/       # Next.js frontend
+grafana/        # Grafana setup
+prometheus/     # Prometheus configuration
+rabbitMq/       # RabbitMQ Docker setup
+reddis/         # Redis Docker setup
